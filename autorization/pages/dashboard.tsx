@@ -3,6 +3,9 @@ import { AuthContext } from "../context/AuthContext";
 import { setupAPIClient } from "../services/api";
 import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
+import { AuthTokenError } from "../services/errors/AuthToeknError";
+import { redirect } from "next/dist/server/api-utils";
+import { destroyCookie } from "nookies";
 
 export default function Dashboar() {
   const { user } = useContext(AuthContext);
@@ -18,10 +21,7 @@ export default function Dashboar() {
 }
 
 export const getServerSideProps = withSSRAuth(async (ctx) => {
-  const apiClient = setupAPIClient(ctx);
-  const response = await apiClient.get("/me");
-
-  console.log(response);
+  setupAPIClient(ctx);
 
   return {
     props: {},
